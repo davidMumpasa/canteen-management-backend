@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 const db = require("./models");
 const userRoutes = require("./routes/userRoutes");
 const orderRoutes = require("./routes/orderRoutes");
@@ -6,9 +7,12 @@ const orderRoutes = require("./routes/orderRoutes");
 const app = express();
 app.use(express.json());
 
+// Use morgan for logging
+app.use(morgan("combined"));
+
 // Routes
-app.use("/api/users", userRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/users", userRoutes);
+app.use("/orders", orderRoutes);
 
 // Connect to DB
 db.sequelize

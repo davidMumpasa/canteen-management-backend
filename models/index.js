@@ -1,5 +1,4 @@
 require("dotenv").config();
-
 const { Sequelize, DataTypes } = require("sequelize");
 
 const sequelize = new Sequelize(
@@ -9,6 +8,7 @@ const sequelize = new Sequelize(
   {
     host: process.env.DB_HOST,
     dialect: "mysql",
+    logging: false,
   }
 );
 
@@ -19,9 +19,17 @@ db.sequelize = sequelize;
 // Load models
 db.User = require("./User")(sequelize, DataTypes);
 db.Order = require("./Order")(sequelize, DataTypes);
+db.Admin = require("./Admin")(sequelize, DataTypes);
+db.FoodItem = require("./FoodItem")(sequelize, DataTypes);
+db.OrderItem = require("./OrderItem")(sequelize, DataTypes);
+db.Payment = require("./Payment")(sequelize, DataTypes);
+db.Inventory = require("./Inventory")(sequelize, DataTypes);
+db.Feedback = require("./Feedback")(sequelize, DataTypes);
+db.ChatBotInteraction = require("./ChatBotInteraction")(sequelize, DataTypes);
 
-// Associations
-db.User.hasMany(db.Order, { foreignKey: "userId" });
-db.Order.belongsTo(db.User, { foreignKey: "userId" });
+// Setup associations
+Object.values(db).forEach((model) => {
+  if (model.associate) model.associate(db);
+});
 
 module.exports = db;

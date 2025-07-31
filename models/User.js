@@ -30,5 +30,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
+  User.associate = (models) => {
+    User.hasMany(models.Order, { foreignKey: "userId" });
+    User.hasMany(models.Feedback, { foreignKey: "userId" });
+    User.hasMany(models.ChatBotInteraction, { foreignKey: "userId" });
+  };
+
   return User;
 };
