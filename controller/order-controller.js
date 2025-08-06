@@ -2,18 +2,19 @@ const { Order, User } = require("../models");
 
 // Create Order
 exports.createOrder = async (req, res) => {
-  const { item_name, quantity, total_price, userId } = req.body;
+  const { item_name, quantity, total_price, userId, icon_url } = req.body;
 
   try {
     const user = await User.findByPk(userId);
     if (!user) return res.status(404).json({ error: "User not found" });
-
     const order = await Order.create({
       item_name,
       quantity,
       total_price,
       userId,
+      icon_url,
     });
+
     res.status(201).json({ message: "Order created", order });
   } catch (err) {
     console.error(err);
